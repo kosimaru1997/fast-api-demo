@@ -27,9 +27,12 @@ RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
 
 
 ##################################################
-# pycharm image
+# pycharm image(開発用)
 ##################################################
 FROM requirements-stage AS pycharm
+
+# SqlALchemyの非推奨メソッドの仕様による警告を表示
+ENV SQLALCHEMY_WARN_20=1
 
 RUN echo "pycharm"
 
