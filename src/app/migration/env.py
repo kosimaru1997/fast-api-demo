@@ -5,6 +5,7 @@ from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
+from sqlmodel import SQLModel
 
 from src.app.db.database import Base
 
@@ -24,7 +25,7 @@ if config.config_file_name is not None:
 
 from src.app.db.models.model_sample import User, Item
 
-target_metadata = Base.metadata
+target_metadata = SQLModel.metadata
 
 
 # other values from the config, defined by the needs of env.py,

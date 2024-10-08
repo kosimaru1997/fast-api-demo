@@ -31,6 +31,10 @@ RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
 ##################################################
 FROM requirements-stage AS pycharm
 
+RUN apt-get update \
+  # mysql dependencies https://github.com/PyMySQL/mysqlclient Debian / Ubuntu
+  && apt-get install -y python3-dev default-libmysqlclient-dev build-essential pkg-config
+
 # SqlALchemyの非推奨メソッドの仕様による警告を表示
 ENV SQLALCHEMY_WARN_20=1
 
@@ -46,12 +50,17 @@ RUN poetry install --no-root --with dev
 
 # PyCharmのから起動するので、ENTRYPOINTは使用しない
 #ENTRYPOINT ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--reload"]
+CMD ["/bin/bash", "/entrypoint.local.sh"]
 
 
 ##################################################
 # dev image
 ##################################################
 FROM python:3.12-slim-bookworm AS dev
+
+RUN apt-get update \
+  # mysql dependencies https://github.com/PyMySQL/mysqlclient Debian / Ubuntu
+  && apt-get install -y python3-dev default-libmysqlclient-dev build-essential pkg-config
 
 ENV PYTHONUNBUFFERED 1
 

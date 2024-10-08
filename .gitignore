@@ -31,3 +31,5 @@ archive.zip
 
 # macOS
 .DS_Store
+
+volumes/
