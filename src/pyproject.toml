@@ -9,10 +9,11 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.12"
 fastapi = "^0.115.0"
-uvicorn = {extras = ["standard"], version = "^0.31.0"}
-sqlalchemy = {extras = ["asyncio"], version = "^2.0.35"}
-aiosqlite = "^0.20.0"
+uvicorn = { extras = ["standard"], version = "^0.31.0" }
+sqlmodel = "^0.0.22"
 alembic = "^1.13.3"
+aiomysql = "^0.2.0"
+mysqlclient = "^2.2.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.4.0"

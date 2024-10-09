@@ -100,6 +100,46 @@ target_metadata = Base.metadata
       # 特定のマイグレーションファイルまで
       alembic downgrade 668
       ```
+  ### SQLModelを使う場合
+    - テーブル例
+  ```python
+  class UserSecond(SQLModel, AsyncAttrs, table=True):
+    __tablename__ = "users_second"
+
+    id: Optional[int] = Field(default=None, primary_key=True)
+    email: str = Field(max_length=100, unique=True, index=True)
+    hashed_password: str = Field(max_length=100)
+    is_active: bool = Field(default=True)
+    # added_column: str = Field(default="default_value", max_length=255)
+
+    items: List["ItemSecond"] = Relationship(back_populates="owner")
+
+
+  class ItemSecond(SQLModel, AsyncAttrs, table=True):
+      __tablename__ = "items_second"
+  
+      id: Optional[int] = Field(default=None, primary_key=True)
+      title: str = Field(max_length=100, index=True)
+      description: str = Field(max_length=255, index=True)
+      owner_id: Optional[int] = Field(default=None, foreign_key="users_second.id")
+  
+      owner: Optional[UserSecond] = Relationship(back_populates="items")
+  ```
+
+    - env.pyのターゲット指定をSQLModelのモデルに変更
+  ```python
+  from src.app.db.models.model_sample import User, Item, UserSecond, ItemSecond
+  
+  target_metadata = SQLModel.metadata
+  ```
+
+    - script.py.makoのテンプレートにSQLModelのモデルを追加
+  ```mako
+  from alembic import op
+  import sqlmodel <- 追加
+  import sqlalchemy as sa
+  ${imports if imports else ""}
+  ```
 
 ## Poetry
 
